@@ -1,0 +1,24 @@
+<!doctype html>
+<html lang="en">
+  <head><title>Checkout</title></head>
+  <body>
+    <!-- BAD: auto-submitting a destructive POST, no confirmation -->
+    <form toolname="placeOrder" method="post" action="/orders/checkout" toolautosubmit>
+      <input name="card" type="text" />
+      <input name="cvc" type="password" />
+      <input type="hidden" name="userId" value="42" />
+      <input id="promo" />
+      <button type="submit">Place order</button>
+    </form>
+
+    <!-- BAD: same tool name as above -->
+    <form toolname="placeOrder" tooldescription="tool" method="get" action="/search">
+      <input name="q" />
+    </form>
+
+    <!-- OK: read-only search, real description -->
+    <form toolname="searchCatalog" tooldescription="Search the product catalog by keyword and return matching items" method="get" action="/search" toolautosubmit>
+      <input name="q" type="text" />
+    </form>
+  </body>
+</html>

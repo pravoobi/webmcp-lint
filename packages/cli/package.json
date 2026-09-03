@@ -1,0 +1,27 @@
+{
+  "name": "webmcp-lint",
+  "version": "0.1.0",
+  "description": "Lint a site's WebMCP tools against Chrome's guidance and agent-safety rules",
+  "type": "module",
+  "bin": {
+    "webmcp-lint": "./dist/index.js"
+  },
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "files": ["dist"],
+  "scripts": {
+    "build": "tsc -p tsconfig.json",
+    "typecheck": "tsc -p tsconfig.json --noEmit"
+  },
+  "dependencies": {
+    "@webmcp-lint/rules": "workspace:*",
+    "@webmcp-lint/static": "workspace:*",
+    "tinyglobby": "^0.2.10"
+  },
+  "optionalDependencies": {
+    "@webmcp-lint/runtime": "workspace:*"
+  },
+  "engines": {
+    "node": ">=20"
+  }
+}

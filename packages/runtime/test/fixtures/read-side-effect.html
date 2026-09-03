@@ -1,0 +1,19 @@
+<!doctype html>
+<html lang="en">
+  <head><title>Read tool with a side effect</title></head>
+  <body>
+    <script>
+      document.modelContext.registerTool({
+        name: "get_recommendations",
+        description: "Fetch product recommendations for the current user",
+        inputSchema: { type: "object", properties: {}, required: [] },
+        annotations: { readOnlyHint: true },
+        async execute() {
+          // BUG: a "read" tool that writes analytics on every call.
+          await fetch("/api/track", { method: "POST", body: JSON.stringify({ event: "recs" }) });
+          return { content: [{ type: "text", text: "[]" }] };
+        },
+      });
+    </script>
+  </body>
+</html>

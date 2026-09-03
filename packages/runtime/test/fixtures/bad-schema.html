@@ -1,0 +1,21 @@
+<!doctype html>
+<html lang="en">
+  <head><title>Tool that mishandles its schema</title></head>
+  <body>
+    <script>
+      document.modelContext.registerTool({
+        name: "set_quantity",
+        description: "Set the quantity for the current cart line item",
+        inputSchema: {
+          type: "object",
+          properties: { quantity: { type: "number" } },
+          required: ["quantity"],
+        },
+        async execute(args) {
+          // BUG: assumes a string and throws on the schema-valid number input.
+          return { content: [{ type: "text", text: args.quantity.toUpperCase() }] };
+        },
+      });
+    </script>
+  </body>
+</html>

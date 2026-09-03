@@ -1,0 +1,18 @@
+<!doctype html>
+<html lang="en">
+  <head><title>Clean</title></head>
+  <body>
+    <h1>Clean page</h1>
+    <script>
+      document.modelContext.registerTool({
+        name: "get_page_heading",
+        description: "Return the text of the main page heading",
+        inputSchema: { type: "object", properties: {}, required: [] },
+        annotations: { readOnlyHint: true },
+        async execute() {
+          return { content: [{ type: "text", text: document.querySelector("h1").textContent }] };
+        },
+      });
+    </script>
+  </body>
+</html>

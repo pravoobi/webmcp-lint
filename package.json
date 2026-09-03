@@ -1,0 +1,22 @@
+{
+  "name": "webmcp-lint-monorepo",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "description": "CI linter + runtime test harness for WebMCP tool safety",
+  "scripts": {
+    "build": "pnpm -r build",
+    "typecheck": "pnpm -r typecheck",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "lint": "tsc -b --noEmit || true"
+  },
+  "devDependencies": {
+    "@types/node": "^22.10.5",
+    "typescript": "^5.7.3",
+    "vitest": "^3.2.0"
+  },
+  "engines": {
+    "node": ">=20"
+  }
+}

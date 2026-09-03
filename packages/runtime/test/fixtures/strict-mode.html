@@ -1,0 +1,27 @@
+<!doctype html>
+<html lang="en">
+  <head><title>StrictMode double mount</title></head>
+  <body>
+    <script>
+      // Simulates React StrictMode mounting the component twice.
+      function mount() {
+        return document.modelContext.registerTool({
+          name: "add_todo",
+          description: "Add an item to the todo list",
+          inputSchema: {
+            type: "object",
+            properties: { text: { type: "string" } },
+            required: ["text"],
+          },
+          async execute({ text }) {
+            return { content: [{ type: "text", text: "added " + text }] };
+          },
+        });
+      }
+      mount();
+      mount().catch(() => {
+        /* swallowed, like a hook that ignores the rejection */
+      });
+    </script>
+  </body>
+</html>
