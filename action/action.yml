@@ -1,0 +1,196 @@
+name: "webmcp-lint"
+description: "Lint a site's WebMCP tools against Chrome's guidance and agent-safety rules."
+author: "webmcp-lint"
+branding:
+  icon: "shield"
+  color: "purple"
+
+inputs:
+  version:
+    description: "npm version/tag of the webmcp-lint CLI to install."
+    default: "latest"
+  config:
+    description: "Path to webmcp-lint.config.{ts,js,mjs,json}."
+    required: false
+  static-globs:
+    description: "Space-separated globs for the static pass (default: **/*.html)."
+    required: false
+  build-command:
+    description: "Command that builds the site before checks run."
+    required: false
+  serve-command:
+    description: "Command that serves the built site (started in the background)."
+    required: false
+  serve-ready-url:
+    description: "URL polled until the server responds (required with serve-command)."
+    required: false
+  url:
+    description: "Newline- or space-separated page URLs for the runtime pass."
+    required: false
+  dir:
+    description: "Directory to serve on localhost for the runtime pass."
+    required: false
+  routes:
+    description: "Path to a JSON array of extra routes to visit per origin."
+    required: false
+  no-runtime:
+    description: "Set to 'true' to run the static pass only."
+    default: "false"
+  upload-sarif:
+    description: "Upload results to GitHub code scanning."
+    default: "true"
+  comment:
+    description: "Post/update a summary comment on pull requests."
+    default: "true"
+  working-directory:
+    description: "Directory to run in."
+    default: "."
+
+outputs:
+  sarif-file:
+    description: "Path to the generated SARIF file."
+    value: ${{ steps.lint.outputs.sarif }}
+  errors:
+    description: "Number of error-level findings."
+    value: ${{ steps.lint.outputs.errors }}
+
+runs:
+  using: "composite"
+  steps:
+    - name: Install webmcp-lint
+      shell: bash
+      env:
+        WML_VERSION: ${{ inputs.version }}
+      run: npm install -g "webmcp-lint@${WML_VERSION}"
+
+    - name: Install Playwright Chromium
+      if: ${{ inputs.no-runtime != 'true' && (inputs.url != '' || inputs.dir != '') }}
+      shell: bash
+      run: npx --yes playwright install --with-deps chromium
+
+    - name: Build site
+      if: ${{ inputs.build-command != '' }}
+      shell: bash
+      working-directory: ${{ inputs.working-directory }}
+      env:
+        BUILD_COMMAND: ${{ inputs.build-command }}
+      run: bash -c "$BUILD_COMMAND"
+
+    - name: Start server
+      if: ${{ inputs.serve-command != '' }}
+      shell: bash
+      working-directory: ${{ inputs.working-directory }}
+      env:
+        SERVE_COMMAND: ${{ inputs.serve-command }}
+        READY_URL: ${{ inputs.serve-ready-url }}
+      run: |
+        nohup bash -c "$SERVE_COMMAND" > "$RUNNER_TEMP/webmcp-serve.log" 2>&1 &
+        echo $! > "$RUNNER_TEMP/webmcp-serve.pid"
+        if [ -n "$READY_URL" ]; then
+          for i in $(seq 1 60); do
+            if curl -fsS -o /dev/null "$READY_URL"; then echo "server up"; exit 0; fi
+            sleep 1
+          done
+          echo "::error::server did not become ready at $READY_URL"
+          cat "$RUNNER_TEMP/webmcp-serve.log" || true
+          exit 1
+        fi
+
+    - name: Run webmcp-lint
+      id: lint
+      shell: bash
+      working-directory: ${{ inputs.working-directory }}
+      env:
+        INPUT_CONFIG: ${{ inputs.config }}
+        INPUT_GLOBS: ${{ inputs.static-globs }}
+        INPUT_URL: ${{ inputs.url }}
+        INPUT_DIR: ${{ inputs.dir }}
+        INPUT_ROUTES: ${{ inputs.routes }}
+        INPUT_NO_RUNTIME: ${{ inputs.no-runtime }}
+      run: |
+        SARIF="$RUNNER_TEMP/webmcp-lint.sarif"
+        ARGS=()
+        [ -n "$INPUT_GLOBS" ] && ARGS+=($INPUT_GLOBS)
+        [ -n "$INPUT_CONFIG" ] && ARGS+=(--config "$INPUT_CONFIG")
+        [ -n "$INPUT_DIR" ] && ARGS+=(--dir "$INPUT_DIR")
+        for u in $INPUT_URL; do ARGS+=(--url "$u"); done
+        [ -n "$INPUT_ROUTES" ] && ARGS+=(--routes "$INPUT_ROUTES")
+        [ "$INPUT_NO_RUNTIME" = "true" ] && ARGS+=(--no-runtime)
+
+        set +e
+        webmcp-lint ci "${ARGS[@]}" --format github --sarif-output "$SARIF"
+        code=$?
+        set -e
+
+        echo "sarif=$SARIF" >> "$GITHUB_OUTPUT"
+        echo "exitcode=$code" >> "$GITHUB_OUTPUT"
+        if [ -f "$SARIF" ]; then
+          node -e '
+            const s = JSON.parse(require("fs").readFileSync(process.argv[1], "utf8"));
+            const r = s.runs[0].results || [];
+            const n = (l) => r.filter((x) => x.level === l).length;
+            const fs = require("fs");
+            fs.appendFileSync(process.env.GITHUB_OUTPUT, `errors=${n("error")}\n`);
+            fs.appendFileSync(process.env.GITHUB_OUTPUT, `warnings=${n("warning")}\n`);
+          ' "$SARIF"
+        fi
+
+    - name: Upload SARIF
+      if: ${{ always() && inputs.upload-sarif == 'true' && steps.lint.outputs.sarif != '' }}
+      uses: github/codeql-action/upload-sarif@v3
+      with:
+        sarif_file: ${{ steps.lint.outputs.sarif }}
+        category: webmcp-lint
+
+    - name: Comment on PR
+      if: ${{ always() && inputs.comment == 'true' && github.event_name == 'pull_request' && steps.lint.outputs.sarif != '' }}
+      uses: actions/github-script@v7
+      env:
+        SARIF_FILE: ${{ steps.lint.outputs.sarif }}
+      with:
+        script: |
+          const fs = require('fs');
+          const sarif = JSON.parse(fs.readFileSync(process.env.SARIF_FILE, 'utf8'));
+          const run = sarif.runs[0];
+          const results = run.results || [];
+          const rulesById = Object.fromEntries((run.tool.driver.rules || []).map(r => [r.id, r]));
+          const byRule = {};
+          for (const r of results) {
+            const k = r.ruleId;
+            (byRule[k] ||= { error: 0, warning: 0, note: 0 })[r.level] = (byRule[k][r.level] || 0) + 1;
+          }
+          const count = (l) => results.filter(r => r.level === l).length;
+          let body = '<!-- webmcp-lint -->\n## webmcp-lint\n\n';
+          body += `**${count('error')}** error(s) · **${count('warning')}** warning(s) · **${count('note')}** info\n\n`;
+          if (Object.keys(byRule).length) {
+            body += '| Rule | Errors | Warnings | Info |\n| --- | --: | --: | --: |\n';
+            for (const [id, c] of Object.entries(byRule).sort()) {
+              const help = rulesById[id]?.helpUri;
+              const label = help ? `[\`${id}\`](${help})` : `\`${id}\``;
+              body += `| ${label} | ${c.error || ''} | ${c.warning || ''} | ${c.note || ''} |\n`;
+            }
+          } else {
+            body += '✅ No problems found.\n';
+          }
+          const { owner, repo } = context.repo;
+          const issue_number = context.issue.number;
+          const existing = (await github.rest.issues.listComments({ owner, repo, issue_number }))
+            .data.find(c => c.body.includes('<!-- webmcp-lint -->'));
+          if (existing) {
+            await github.rest.issues.updateComment({ owner, repo, comment_id: existing.id, body });
+          } else {
+            await github.rest.issues.createComment({ owner, repo, issue_number, body });
+          }
+
+    - name: Stop server
+      if: ${{ always() && inputs.serve-command != '' }}
+      shell: bash
+      run: |
+        [ -f "$RUNNER_TEMP/webmcp-serve.pid" ] && kill "$(cat "$RUNNER_TEMP/webmcp-serve.pid")" 2>/dev/null || true
+
+    - name: Fail on error-level findings
+      if: ${{ steps.lint.outputs.exitcode != '0' }}
+      shell: bash
+      run: |
+        echo "::error::webmcp-lint reported error-level findings (exit ${{ steps.lint.outputs.exitcode }})"
+        exit 1

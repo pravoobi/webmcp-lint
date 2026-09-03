@@ -1,18 +1,21 @@
-import type { Finding } from "@webmcp-lint/rules";
+import { displayPath, type ReportInput } from "../report.js";
 
-export function renderJson(
-  findings: Finding[],
-  summary: Record<string, number>,
-): string {
+export function renderJson(input: ReportInput): string {
   return JSON.stringify(
     {
       version: 1,
-      summary,
-      findings: findings.map((f) => ({
+      summary: {
+        ...input.summary,
+        errors: input.errors,
+        warnings: input.warnings,
+        infos: input.infos,
+      },
+      findings: input.findings.map((f) => ({
         ruleId: f.ruleId,
         severity: f.severity,
         message: f.message,
         file: f.file,
+        path: displayPath(f.file, input.cwd),
         line: f.loc.line,
         column: f.loc.column,
         endLine: f.loc.endLine ?? null,

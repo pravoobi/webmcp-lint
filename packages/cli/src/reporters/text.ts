@@ -1,5 +1,5 @@
-import { relative } from "node:path";
 import type { Finding } from "@webmcp-lint/rules";
+import { displayPath, type ReportInput } from "../report.js";
 
 const COLOR = process.stdout.isTTY && !process.env["NO_COLOR"];
 
@@ -17,22 +17,7 @@ function severityTag(sev: Finding["severity"]): string {
   return c.blue("info ");
 }
 
-function displayFile(file: string, cwd: string): string {
-  if (/^https?:\/\//.test(file)) return file;
-  return relative(cwd, file) || file;
-}
-
-export interface TextReport {
-  findings: Finding[];
-  cwd: string;
-  /** e.g. "2 file(s), 5 tool(s) checked" */
-  scope: string;
-  errors: number;
-  warnings: number;
-  infos: number;
-}
-
-export function renderText(report: TextReport): string {
+export function renderText(report: ReportInput): string {
   const { findings, cwd } = report;
   const lines: string[] = [];
 
@@ -44,7 +29,7 @@ export function renderText(report: TextReport): string {
   }
 
   for (const [file, fileFindings] of byFile) {
-    lines.push(c.bold(displayFile(file, cwd)));
+    lines.push(c.bold(displayPath(file, cwd)));
     for (const f of fileFindings) {
       const pos = c.dim(`${f.loc.line}:${f.loc.column}`);
       lines.push(`  ${pos}  ${severityTag(f.severity)}  ${f.message}  ${c.dim(f.ruleId)}`);

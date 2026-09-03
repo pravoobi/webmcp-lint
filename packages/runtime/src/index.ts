@@ -1,3 +1,4 @@
+import { relative } from "node:path";
 import {
   countBySeverity,
   runRuntimeRules,
@@ -21,6 +22,14 @@ export interface RuntimeRunOptions extends HarnessOptions {
   /** Paths (relative to the served dir / first URL origin) to also visit. */
   routes?: string[];
   config?: WebmcpLintConfig;
+  /**
+   * When serving a directory, rewrite finding/observation URLs back to
+   * `<dir>/<path>` (relative to `pathBase`) so code-scanning tools can annotate
+   * the source. Default: true when `serveDir` is set.
+   */
+  mapPathsToDir?: boolean;
+  /** Base for the rewritten relative paths (default: process.cwd()). */
+  pathBase?: string;
 }
 
 export interface RuntimeResult {
@@ -35,10 +44,7 @@ export interface RuntimeResult {
   };
 }
 
-function resolveTargets(
-  base: string[],
-  routes: string[] | undefined,
-): string[] {
+function resolveTargets(base: string[], routes: string[] | undefined): string[] {
   if (!routes || routes.length === 0) return base;
   // When routes are given, visit exactly those paths per origin (not the bare origin).
   const out: string[] = [];
@@ -63,6 +69,19 @@ export async function runRuntime(options: RuntimeRunOptions): Promise<RuntimeRes
   try {
     const targets = resolveTargets(urls, options.routes);
     const observations = await observeUrls(targets, options);
+
+    if (server && options.serveDir && options.mapPathsToDir !== false) {
+      const base = options.pathBase ?? process.cwd();
+      const prefix = relative(base, options.serveDir).split("\\").join("/");
+      const rewrite = (u: string) =>
+        u.startsWith(server!.url)
+          ? `${prefix ? prefix + "/" : ""}${u.slice(server!.url.length)}`
+          : u;
+      for (const obs of observations) {
+        obs.url = rewrite(obs.url);
+      }
+    }
+
     const findings = runRuntimeRules(observations, { config: options.config });
     const counts = countBySeverity(findings);
     return {

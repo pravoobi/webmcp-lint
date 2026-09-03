@@ -1,0 +1,269 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`renderSarif > matches the snapshot 1`] = `
+"{
+  "$schema": "https://raw.githubusercontent.com/oasis-tcs/sarif-spec/master/Schemata/sarif-schema-2.1.0.json",
+  "version": "2.1.0",
+  "runs": [
+    {
+      "tool": {
+        "driver": {
+          "name": "webmcp-lint",
+          "informationUri": "https://github.com/webmcp-lint/webmcp-lint",
+          "version": "0.0.0-test",
+          "rules": [
+            {
+              "id": "no-autosubmit-destructive",
+              "name": "NoAutosubmitDestructive",
+              "shortDescription": {
+                "text": "Disallow \`toolautosubmit\` on forms that mutate state or look destructive."
+              },
+              "helpUri": "https://github.com/webmcp-lint/webmcp-lint/blob/main/docs/rules/no-autosubmit-destructive.md",
+              "defaultConfiguration": {
+                "level": "error"
+              },
+              "properties": {
+                "kind": "html",
+                "tags": [
+                  "webmcp",
+                  "agent-safety"
+                ]
+              }
+            },
+            {
+              "id": "no-sensitive-inputs-exposed",
+              "name": "NoSensitiveInputsExposed",
+              "shortDescription": {
+                "text": "Disallow password/file/hidden inputs from appearing in a tool's input schema."
+              },
+              "helpUri": "https://github.com/webmcp-lint/webmcp-lint/blob/main/docs/rules/no-sensitive-inputs-exposed.md",
+              "defaultConfiguration": {
+                "level": "error"
+              },
+              "properties": {
+                "kind": "html",
+                "tags": [
+                  "webmcp",
+                  "agent-safety"
+                ]
+              }
+            },
+            {
+              "id": "require-tooldescription",
+              "name": "RequireTooldescription",
+              "shortDescription": {
+                "text": "Require every declarative tool to carry a \`tooldescription\`."
+              },
+              "helpUri": "https://github.com/webmcp-lint/webmcp-lint/blob/main/docs/rules/require-tooldescription.md",
+              "defaultConfiguration": {
+                "level": "error"
+              },
+              "properties": {
+                "kind": "html",
+                "tags": [
+                  "webmcp",
+                  "agent-safety"
+                ]
+              }
+            },
+            {
+              "id": "description-quality",
+              "name": "DescriptionQuality",
+              "shortDescription": {
+                "text": "Flag placeholder or too-short \`tooldescription\` values."
+              },
+              "helpUri": "https://github.com/webmcp-lint/webmcp-lint/blob/main/docs/rules/description-quality.md",
+              "defaultConfiguration": {
+                "level": "warning"
+              },
+              "properties": {
+                "kind": "html",
+                "tags": [
+                  "webmcp",
+                  "agent-safety"
+                ]
+              }
+            },
+            {
+              "id": "named-inputs",
+              "name": "NamedInputs",
+              "shortDescription": {
+                "text": "Flag tool form controls without a \`name\` (silently dropped from the schema)."
+              },
+              "helpUri": "https://github.com/webmcp-lint/webmcp-lint/blob/main/docs/rules/named-inputs.md",
+              "defaultConfiguration": {
+                "level": "warning"
+              },
+              "properties": {
+                "kind": "html",
+                "tags": [
+                  "webmcp",
+                  "agent-safety"
+                ]
+              }
+            },
+            {
+              "id": "unique-toolnames",
+              "name": "UniqueToolnames",
+              "shortDescription": {
+                "text": "Require tool names to be unique across all scanned pages."
+              },
+              "helpUri": "https://github.com/webmcp-lint/webmcp-lint/blob/main/docs/rules/unique-toolnames.md",
+              "defaultConfiguration": {
+                "level": "error"
+              },
+              "properties": {
+                "kind": "html",
+                "tags": [
+                  "webmcp",
+                  "agent-safety"
+                ]
+              }
+            },
+            {
+              "id": "registers-cleanly",
+              "name": "RegistersCleanly",
+              "shortDescription": {
+                "text": "Page load should register tools once, with no duplicate registrations or errors."
+              },
+              "helpUri": "https://github.com/webmcp-lint/webmcp-lint/blob/main/docs/rules/registers-cleanly.md",
+              "defaultConfiguration": {
+                "level": "error"
+              },
+              "properties": {
+                "kind": "runtime",
+                "tags": [
+                  "webmcp",
+                  "agent-safety"
+                ]
+              }
+            },
+            {
+              "id": "schema-validates",
+              "name": "SchemaValidates",
+              "shortDescription": {
+                "text": "Each tool should run cleanly on a schema-valid input and never hang."
+              },
+              "helpUri": "https://github.com/webmcp-lint/webmcp-lint/blob/main/docs/rules/schema-validates.md",
+              "defaultConfiguration": {
+                "level": "warning"
+              },
+              "properties": {
+                "kind": "runtime",
+                "tags": [
+                  "webmcp",
+                  "agent-safety"
+                ]
+              }
+            },
+            {
+              "id": "no-side-effects-on-read",
+              "name": "NoSideEffectsOnRead",
+              "shortDescription": {
+                "text": "Invoking a read-only tool must not fire non-GET network requests."
+              },
+              "helpUri": "https://github.com/webmcp-lint/webmcp-lint/blob/main/docs/rules/no-side-effects-on-read.md",
+              "defaultConfiguration": {
+                "level": "error"
+              },
+              "properties": {
+                "kind": "runtime",
+                "tags": [
+                  "webmcp",
+                  "agent-safety"
+                ]
+              }
+            }
+          ]
+        }
+      },
+      "results": [
+        {
+          "ruleId": "no-autosubmit-destructive",
+          "level": "error",
+          "message": {
+            "text": "Tool \\"placeOrder\\" sets \`toolautosubmit\` on a POST form.\\n\\nSuggested fix: Remove the \`toolautosubmit\` attribute."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "src/checkout.html"
+                },
+                "region": {
+                  "startLine": 6,
+                  "startColumn": 5,
+                  "endLine": 6,
+                  "endColumn": 40
+                }
+              }
+            }
+          ],
+          "partialFingerprints": {
+            "webmcpLint/v1": "2517e75090655ac2"
+          },
+          "ruleIndex": 0,
+          "properties": {
+            "confidence": "high"
+          }
+        },
+        {
+          "ruleId": "description-quality",
+          "level": "warning",
+          "message": {
+            "text": "Tool \\"placeOrder\\" description is a placeholder (\\"tool\\")."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "src/checkout.html"
+                },
+                "region": {
+                  "startLine": 15,
+                  "startColumn": 5
+                }
+              }
+            }
+          ],
+          "partialFingerprints": {
+            "webmcpLint/v1": "8ef253d302a96eb2"
+          },
+          "ruleIndex": 3,
+          "properties": {
+            "confidence": "medium"
+          }
+        },
+        {
+          "ruleId": "registers-cleanly",
+          "level": "error",
+          "message": {
+            "text": "Tool \\"add_todo\\" was registered 2 times on one page load."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "site/index.html"
+                },
+                "region": {
+                  "startLine": 1,
+                  "startColumn": 1
+                }
+              }
+            }
+          ],
+          "partialFingerprints": {
+            "webmcpLint/v1": "3f8a62b6940d6b13"
+          },
+          "ruleIndex": 6
+        }
+      ],
+      "properties": {
+        "files": 1,
+        "tools": 3
+      }
+    }
+  ]
+}"
+`;

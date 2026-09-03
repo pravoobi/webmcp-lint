@@ -10,17 +10,17 @@ speed. Chrome documents the guidance; nothing enforces it in CI. This does.
 
 ## Status
 
-Milestones **M1** and **M2** are implemented: the rule engine, the
-declarative-HTML static analyzer, the Playwright runtime harness (real
-`@mcp-b/webmcp-polyfill` injected), nine built-in rules, and `text` / `json`
-reporters.
+Milestones **M1–M3** are implemented: the rule engine, the declarative-HTML
+static analyzer, the Playwright runtime harness (real `@mcp-b/webmcp-polyfill`
+injected), nine built-in rules, `text` / `json` / `sarif` / `github` reporters,
+a `ci` command, and a composite GitHub Action.
 
 | Milestone | Scope | State |
 |-----------|-------|-------|
 | M1 | rule engine + static HTML rules + text/json reporters | ✅ done |
 | M2 | Playwright runtime harness w/ polyfill injection, 3 runtime rules | ✅ done |
-| M3 | SARIF + GitHub Action, rule docs site | ⬜ |
-| M4 | dogfood + publish | ⬜ |
+| M3 | SARIF + `github` reporters, `webmcp-lint ci`, GitHub Action, rule docs | ✅ done |
+| M4 | dogfood on real apps + publish | ⬜ |
 
 ## Install & run (from a checkout)
 
@@ -39,24 +39,47 @@ node packages/cli/dist/index.js runtime --dir ./dist --routes routes.json
 ```
 webmcp-lint static [globs...]        HTML static rules (no browser)
 webmcp-lint runtime [--url <u>...]   Load pages w/ the WebMCP polyfill, inspect + invoke tools
+webmcp-lint ci [globs...]            static + runtime together, for CI
 webmcp-lint rules                    List built-in rules
-webmcp-lint ci                       (M3) static + runtime, SARIF — not yet implemented
 
-  -f, --format <text|json>           Output format (default: text)
-  -c, --config <path>                webmcp-lint.config.{ts,js,mjs,json}
+  -f, --format <text|json|sarif|github>  Output format (default: text)
+  -c, --config <path>                    webmcp-lint.config.{ts,js,mjs,json}
+  -o, --output <file>                    Write the report to a file
+      --sarif-output <file>              Also write SARIF (for code-scanning upload)
 
-runtime:
+runtime / ci:
       --url <url>                    Page to check (repeatable)
       --dir <path>                   Serve this dir on localhost and check it
       --routes <file.json>           JSON array of extra paths to visit per origin
       --headed                       Show the browser
       --timeout <ms>                 Navigation / invocation timeout (default 15000)
+      --no-runtime                   (ci) static pass only
+```
+
+## GitHub Action
+
+`action/` is a composite action that runs `webmcp-lint ci`, uploads SARIF to code
+scanning, and posts a PR summary comment. See [`action/README.md`](./action/README.md).
+
+```yaml
+- uses: webmcp-lint/webmcp-lint/action@v1
+  with:
+    build-command: npm run build
+    serve-command: npx serve -l 3000 dist
+    serve-ready-url: http://localhost:3000
+    url: |
+      http://localhost:3000/
+      http://localhost:3000/checkout
 ```
 
 Exit code is `1` when any error-level finding is present, `0` when clean, `2` on
 usage errors.
 
-## Static rules (M1)
+## Rules
+
+Full list with per-rule docs: [`docs/rules/`](./docs/rules/README.md).
+
+### Static rules (M1)
 
 Operate on `<form>` elements carrying the declarative WebMCP attributes
 (`toolname`, `tooldescription`, `toolautosubmit` — `tool-` and `data-tool-`
@@ -71,7 +94,7 @@ prefixes are also accepted).
 | `named-inputs` | warn | controls with an `id` but no `name` (silently dropped from the schema) |
 | `unique-toolnames` | error | the same `toolname` registered on more than one page |
 
-## Runtime rules (M2)
+### Runtime rules (M2)
 
 The harness injects `@mcp-b/webmcp-polyfill` via a Playwright init script, loads
 each page over `http://localhost` (a secure context), reads
