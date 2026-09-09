@@ -3,6 +3,21 @@
   "version": "0.1.0",
   "description": "WebMCP lint rule engine and built-in rules (pure, no I/O)",
   "type": "module",
+  "license": "MIT",
+  "author": "Venkata Praveen Velisetty",
+  "keywords": ["webmcp", "mcp", "linter", "agent-safety"],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/pravoobi/webmcp-lint.git",
+    "directory": "packages/rules"
+  },
+  "homepage": "https://github.com/pravoobi/webmcp-lint#readme",
+  "bugs": {
+    "url": "https://github.com/pravoobi/webmcp-lint/issues"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
   "exports": {

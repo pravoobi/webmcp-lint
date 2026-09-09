@@ -4,6 +4,16 @@
   "private": true,
   "type": "module",
   "description": "CI linter + runtime test harness for WebMCP tool safety",
+  "license": "MIT",
+  "author": "Venkata Praveen Velisetty",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/pravoobi/webmcp-lint.git"
+  },
+  "homepage": "https://github.com/pravoobi/webmcp-lint#readme",
+  "bugs": {
+    "url": "https://github.com/pravoobi/webmcp-lint/issues"
+  },
   "scripts": {
     "build": "pnpm -r build",
     "typecheck": "pnpm -r typecheck",

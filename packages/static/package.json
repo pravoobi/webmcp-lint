@@ -3,6 +3,21 @@
   "version": "0.1.0",
   "description": "Static analyzers for WebMCP: declarative HTML (and later JS/TS)",
   "type": "module",
+  "license": "MIT",
+  "author": "Venkata Praveen Velisetty",
+  "keywords": ["webmcp", "mcp", "linter", "static-analysis", "parse5"],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/pravoobi/webmcp-lint.git",
+    "directory": "packages/static"
+  },
+  "homepage": "https://github.com/pravoobi/webmcp-lint#readme",
+  "bugs": {
+    "url": "https://github.com/pravoobi/webmcp-lint/issues"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
   "exports": {

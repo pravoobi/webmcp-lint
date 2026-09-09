@@ -3,12 +3,24 @@
   "version": "0.1.0",
   "description": "Lint a site's WebMCP tools against Chrome's guidance and agent-safety rules",
   "type": "module",
+  "license": "MIT",
+  "author": "Venkata Praveen Velisetty",
+  "keywords": ["webmcp", "mcp", "linter", "ci", "agent-safety", "chrome", "sarif"],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/pravoobi/webmcp-lint.git",
+    "directory": "packages/cli"
+  },
+  "homepage": "https://github.com/pravoobi/webmcp-lint#readme",
+  "bugs": {
+    "url": "https://github.com/pravoobi/webmcp-lint/issues"
+  },
   "bin": {
     "webmcp-lint": "./dist/index.js"
   },
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
-  "files": ["dist"],
+  "files": ["dist", "README.md"],
   "scripts": {
     "build": "tsc -p tsconfig.json",
     "typecheck": "tsc -p tsconfig.json --noEmit"

@@ -3,6 +3,21 @@
   "version": "0.1.0",
   "description": "Playwright runtime harness: loads pages with the WebMCP polyfill and inspects what registers",
   "type": "module",
+  "license": "MIT",
+  "author": "Venkata Praveen Velisetty",
+  "keywords": ["webmcp", "mcp", "linter", "playwright", "runtime"],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/pravoobi/webmcp-lint.git",
+    "directory": "packages/runtime"
+  },
+  "homepage": "https://github.com/pravoobi/webmcp-lint#readme",
+  "bugs": {
+    "url": "https://github.com/pravoobi/webmcp-lint/issues"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
   "exports": {
