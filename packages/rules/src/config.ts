@@ -17,6 +17,11 @@ export interface WebmcpLintConfig {
   destructivePatternsReplace?: string[];
   /** Glob(s) of pages to scan when none are passed on the CLI. */
   pages?: string[];
+  /**
+   * Tool count above which `tool-count` flags the page (default 15). Agents
+   * degrade with big tool menus, per Chrome's guidance.
+   */
+  toolCountMax?: number;
 }
 
 /**
@@ -45,10 +50,13 @@ export const DEFAULT_DESTRUCTIVE_PATTERNS: string[] = [
   "revoke",
 ];
 
+export const DEFAULT_TOOL_COUNT_MAX = 15;
+
 export interface ResolvedConfig {
   rules: Record<string, RuleLevel>;
   destructiveRegex: RegExp;
   pages: string[];
+  toolCountMax: number;
 }
 
 export function resolveConfig(user: WebmcpLintConfig = {}): ResolvedConfig {
@@ -60,6 +68,7 @@ export function resolveConfig(user: WebmcpLintConfig = {}): ResolvedConfig {
     rules: { ...(user.rules ?? {}) },
     destructiveRegex: new RegExp(patterns.map((p) => `(?:${p})`).join("|"), "i"),
     pages: user.pages ?? [],
+    toolCountMax: user.toolCountMax ?? DEFAULT_TOOL_COUNT_MAX,
   };
 }
 

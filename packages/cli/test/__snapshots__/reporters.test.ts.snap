@@ -121,6 +121,132 @@ exports[`renderSarif > matches the snapshot 1`] = `
               }
             },
             {
+              "id": "confirm-state-changing",
+              "name": "ConfirmStateChanging",
+              "shortDescription": {
+                "text": "Flag a tool handler that performs a mutating fetch with no confirmation gate."
+              },
+              "helpUri": "https://github.com/pravoobi/webmcp-lint/blob/main/docs/rules/confirm-state-changing.md",
+              "defaultConfiguration": {
+                "level": "warning"
+              },
+              "properties": {
+                "kind": "js",
+                "tags": [
+                  "webmcp",
+                  "agent-safety"
+                ]
+              }
+            },
+            {
+              "id": "agent-rate-limit",
+              "name": "AgentRateLimit",
+              "shortDescription": {
+                "text": "Flag a mutating tool handler with no throttle/debounce and no \`agentInvoked\` branch."
+              },
+              "helpUri": "https://github.com/pravoobi/webmcp-lint/blob/main/docs/rules/agent-rate-limit.md",
+              "defaultConfiguration": {
+                "level": "warning"
+              },
+              "properties": {
+                "kind": "js",
+                "tags": [
+                  "webmcp",
+                  "agent-safety"
+                ]
+              }
+            },
+            {
+              "id": "schema-required",
+              "name": "SchemaRequired",
+              "shortDescription": {
+                "text": "Require every imperatively-registered tool to declare an \`inputSchema\`."
+              },
+              "helpUri": "https://github.com/pravoobi/webmcp-lint/blob/main/docs/rules/schema-required.md",
+              "defaultConfiguration": {
+                "level": "error"
+              },
+              "properties": {
+                "kind": "js",
+                "tags": [
+                  "webmcp",
+                  "agent-safety"
+                ]
+              }
+            },
+            {
+              "id": "schema-descriptions",
+              "name": "SchemaDescriptions",
+              "shortDescription": {
+                "text": "Flag \`inputSchema\` properties with no \`description\`."
+              },
+              "helpUri": "https://github.com/pravoobi/webmcp-lint/blob/main/docs/rules/schema-descriptions.md",
+              "defaultConfiguration": {
+                "level": "warning"
+              },
+              "properties": {
+                "kind": "js",
+                "tags": [
+                  "webmcp",
+                  "agent-safety"
+                ]
+              }
+            },
+            {
+              "id": "secure-context",
+              "name": "SecureContext",
+              "shortDescription": {
+                "text": "Registration code should be secure-context aware — \`modelContext\` is undefined off HTTPS."
+              },
+              "helpUri": "https://github.com/pravoobi/webmcp-lint/blob/main/docs/rules/secure-context.md",
+              "defaultConfiguration": {
+                "level": "note"
+              },
+              "properties": {
+                "kind": "js",
+                "tags": [
+                  "webmcp",
+                  "agent-safety"
+                ]
+              }
+            },
+            {
+              "id": "registration-surface",
+              "name": "RegistrationSurface",
+              "shortDescription": {
+                "text": "Flag hardcoding \`navigator.modelContext\` or \`document.modelContext\` without feature-detecting both."
+              },
+              "helpUri": "https://github.com/pravoobi/webmcp-lint/blob/main/docs/rules/registration-surface.md",
+              "defaultConfiguration": {
+                "level": "warning"
+              },
+              "properties": {
+                "kind": "js",
+                "tags": [
+                  "webmcp",
+                  "agent-safety"
+                ]
+              }
+            },
+            {
+              "id": "tool-count",
+              "name": "ToolCount",
+              "shortDescription": {
+                "text": "Flag more than N tools registered across the scanned files (default 15)."
+              },
+              "helpUri": "https://github.com/pravoobi/webmcp-lint/blob/main/docs/rules/tool-count.md",
+              "defaultConfiguration": {
+                "level": "note"
+              },
+              "properties": {
+                "kind": "js",
+                "tags": [
+                  "webmcp",
+                  "agent-safety"
+                ]
+              }
+            },
+            {
               "id": "registers-cleanly",
               "name": "RegistersCleanly",
               "shortDescription": {
@@ -256,7 +382,7 @@ exports[`renderSarif > matches the snapshot 1`] = `
           "partialFingerprints": {
             "webmcpLint/v1": "3f8a62b6940d6b13"
           },
-          "ruleIndex": 6
+          "ruleIndex": 13
         }
       ],
       "properties": {

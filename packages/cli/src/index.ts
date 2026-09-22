@@ -5,22 +5,31 @@ import { readFile, writeFile, mkdir } from "node:fs/promises";
 import { dirname, resolve } from "node:path";
 import process from "node:process";
 import { glob } from "tinyglobby";
-import { analyzeHtmlFiles, type StaticResult } from "@pravoobi/webmcp-lint-static";
+import { analyzeStaticFiles, type StaticResult } from "@pravoobi/webmcp-lint-static";
 import { ruleCatalog, type Finding } from "@pravoobi/webmcp-lint-rules";
 import { loadConfig } from "./config.js";
+import { isIgnoredPath } from "./ignore.js";
 import { REPORT_FORMATS, type ReportFormat, type ReportInput } from "./report.js";
 import { render } from "./reporters/index.js";
 
 const require = createRequire(import.meta.url);
 const pkg = require("../package.json") as { version: string };
 
-const DEFAULT_GLOBS = ["**/*.html", "**/*.htm"];
-const DEFAULT_IGNORE = ["**/node_modules/**", "**/dist/**", "**/build/**", "**/.git/**"];
+const DEFAULT_GLOBS = [
+  "**/*.html",
+  "**/*.htm",
+  "**/*.ts",
+  "**/*.tsx",
+  "**/*.js",
+  "**/*.jsx",
+  "**/*.mjs",
+  "**/*.cjs",
+];
 
 const HELP = `webmcp-lint ${pkg.version}
 
 Usage:
-  webmcp-lint static [globs...]        HTML static rules (no browser)
+  webmcp-lint static [globs...]        HTML + JS/TS static rules (no browser)
   webmcp-lint runtime [--url <u>...]   Load pages w/ the WebMCP polyfill, inspect + invoke tools
   webmcp-lint ci [globs...]            static + runtime together, for CI
   webmcp-lint rules                    List built-in rules
@@ -168,9 +177,17 @@ async function collectStatic(
       : config.pages && config.pages.length > 0
         ? config.pages
         : DEFAULT_GLOBS;
-  const files = await glob(patterns, { cwd, absolute: true, ignore: DEFAULT_IGNORE, dot: false });
-  if (files.length === 0) return { error: `No HTML files matched: ${patterns.join(", ")}` };
-  return analyzeHtmlFiles(files.sort(), config);
+  const matched = await glob(patterns, { cwd, absolute: true, dot: false });
+  const files = matched.filter((f) => !isIgnoredPath(f));
+  if (files.length === 0) {
+    return {
+      error:
+        matched.length > 0
+          ? `No files matched: ${patterns.join(", ")} (${matched.length} matched but were all ignored — node_modules/dist/build/.git/tests)`
+          : `No files matched: ${patterns.join(", ")}`,
+    };
+  }
+  return analyzeStaticFiles(files.sort(), config);
 }
 
 async function runStatic(

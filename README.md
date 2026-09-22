@@ -10,9 +10,10 @@ speed. Chrome documents the guidance; nothing enforces it in CI. This does.
 
 ## Status
 
-Milestones **M1–M3** are implemented: the rule engine, the declarative-HTML
-static analyzer, the Playwright runtime harness (real `@mcp-b/webmcp-polyfill`
-injected), nine built-in rules, `text` / `json` / `sarif` / `github` reporters,
+Milestones **M1–M4** are implemented and published to npm: the rule engine,
+the declarative-HTML static analyzer, the imperative-JS/TS static analyzer
+(ts-morph), the Playwright runtime harness (real `@mcp-b/webmcp-polyfill`
+injected), 16 built-in rules, `text` / `json` / `sarif` / `github` reporters,
 a `ci` command, and a composite GitHub Action.
 
 | Milestone | Scope | State |
@@ -20,14 +21,15 @@ a `ci` command, and a composite GitHub Action.
 | M1 | rule engine + static HTML rules + text/json reporters | ✅ done |
 | M2 | Playwright runtime harness w/ polyfill injection, 3 runtime rules | ✅ done |
 | M3 | SARIF + `github` reporters, `webmcp-lint ci`, GitHub Action, rule docs | ✅ done |
-| M4 | dogfood on real apps + publish | ⬜ |
+| M4 | dogfood on real apps + publish | ✅ done |
+| — | imperative JS/TS static rules (ts-morph) | ✅ done |
 
 ## Install & run (from a checkout)
 
 ```bash
 pnpm install
 pnpm build
-node packages/cli/dist/index.js static "**/*.html"
+node packages/cli/dist/index.js static   # HTML + JS/TS, default globs
 
 # runtime needs a browser once:
 pnpm --filter @pravoobi/webmcp-lint-runtime exec playwright install chromium
@@ -37,7 +39,7 @@ node packages/cli/dist/index.js runtime --dir ./dist --routes routes.json
 ## CLI
 
 ```
-webmcp-lint static [globs...]        HTML static rules (no browser)
+webmcp-lint static [globs...]        HTML + JS/TS static rules (no browser)
 webmcp-lint runtime [--url <u>...]   Load pages w/ the WebMCP polyfill, inspect + invoke tools
 webmcp-lint ci [globs...]            static + runtime together, for CI
 webmcp-lint rules                    List built-in rules
@@ -79,7 +81,7 @@ usage errors.
 
 Full list with per-rule docs: [`docs/rules/`](./docs/rules/README.md).
 
-### Static rules (M1)
+### Declarative (HTML) rules
 
 Operate on `<form>` elements carrying the declarative WebMCP attributes
 (`toolname`, `tooldescription`, `toolautosubmit` — `tool-` and `data-tool-`
@@ -92,9 +94,28 @@ prefixes are also accepted).
 | `require-tooldescription` | error | tool form with no `tooldescription` |
 | `description-quality` | warn | placeholder or very short descriptions ("form", "submit", …) |
 | `named-inputs` | warn | controls with an `id` but no `name` (silently dropped from the schema) |
-| `unique-toolnames` | error | the same `toolname` registered on more than one page |
+| `unique-toolnames` | error/warn | the same tool name registered twice in *one page* (error) or reused across *different* pages (warn — WebMCP scopes tools per page, so this is often fine) |
 
-### Runtime rules (M2)
+### Imperative (JS/TS) rules
+
+Operate on `document.modelContext.registerTool(...)` / `navigator.modelContext.registerTool(...)`
+calls and hooks whose name suggests WebMCP (`useWebMCP`, `useMcpTool`, …), via
+[ts-morph](https://ts-morph.com/) — syntactic, per-file, no type-checking
+required. Extraction only covers the common "inline object literal, inline
+handler" shape; a call built by a helper function is skipped rather than
+guessed at. See each rule's doc page for known limitations.
+
+| Rule | Default | What it catches |
+|------|---------|-----------------|
+| `schema-required` | error | a registered tool with no `inputSchema` |
+| `schema-descriptions` | warn | an `inputSchema` property with no `description` |
+| `confirm-state-changing` | warn | a handler that sends a mutating `fetch` (POST/PUT/PATCH/DELETE) with no confirmation gate (`confirm(...)` or `annotations.destructiveHint: true`) |
+| `agent-rate-limit` | warn | a mutating handler with no throttle/debounce and no `event.agentInvoked` check |
+| `registration-surface` | warn | a file that only ever references `navigator.modelContext` or `document.modelContext`, never both (no feature detection) |
+| `secure-context` | info | a file that registers tools but never checks `isSecureContext`/`location.protocol` |
+| `tool-count` | info | more than `toolCountMax` (default 15) tool registrations across the scanned files |
+
+### Runtime rules
 
 The harness injects `@mcp-b/webmcp-polyfill` via a Playwright init script, loads
 each page over `http://localhost` (a secure context), reads
@@ -120,14 +141,15 @@ export default {
   },
   destructivePatterns: ["gift", "redeem"],
   pages: ["public/**/*.html"],
+  toolCountMax: 25, // default 15, see the `tool-count` rule
 };
 ```
 
 ## Packages
 
-- `packages/rules` — pure rule engine + static and runtime rules (no I/O; runtime
+- `packages/rules` — pure rule engine + html/js/runtime rules (no I/O; runtime
   rules analyze a plain `RuntimeObservation` the harness produces)
-- `packages/static` — parse5-based HTML analyzer
+- `packages/static` — parse5-based HTML analyzer + ts-morph-based JS/TS analyzer
 - `packages/runtime` — Playwright harness + polyfill injection + tool invocation
 - `packages/cli` — `webmcp-lint` command + reporters
 

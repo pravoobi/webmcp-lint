@@ -1,10 +1,11 @@
 import type { Severity } from "./types.js";
 import { htmlRules } from "./rules/index.js";
+import { jsRules } from "./rules-js/index.js";
 import { runtimeRules } from "./runtime/rules/index.js";
 
 export interface RuleMeta {
   id: string;
-  kind: "html" | "runtime";
+  kind: "html" | "js" | "runtime";
   defaultSeverity: Severity;
   fixable: boolean;
   description: string;
@@ -17,6 +18,16 @@ export const ruleCatalog: RuleMeta[] = [
     (r): RuleMeta => ({
       id: r.id,
       kind: "html",
+      defaultSeverity: r.defaultSeverity,
+      fixable: r.fixable,
+      description: r.description,
+      docs: r.docs,
+    }),
+  ),
+  ...jsRules.map(
+    (r): RuleMeta => ({
+      id: r.id,
+      kind: "js",
       defaultSeverity: r.defaultSeverity,
       fixable: r.fixable,
       description: r.description,

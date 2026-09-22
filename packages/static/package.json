@@ -1,7 +1,7 @@
 {
   "name": "@pravoobi/webmcp-lint-static",
   "version": "0.1.1",
-  "description": "Static analyzers for WebMCP: declarative HTML (and later JS/TS)",
+  "description": "Static analyzers for WebMCP: declarative HTML and imperative JS/TS",
   "type": "module",
   "license": "MIT",
   "author": "Venkata Praveen Velisetty",
@@ -33,6 +33,7 @@
   },
   "dependencies": {
     "@pravoobi/webmcp-lint-rules": "workspace:*",
-    "parse5": "^7.2.1"
+    "parse5": "^7.2.1",
+    "ts-morph": "^28.0.0"
   }
 }

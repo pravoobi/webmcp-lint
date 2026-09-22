@@ -59,6 +59,63 @@ export interface HtmlFileParse {
   tools: HtmlTool[];
 }
 
+/** One property of a `registerTool`/hook call's `inputSchema` object literal. */
+export interface JsSchemaProperty {
+  name: string;
+  hasDescription: boolean;
+  loc: SourceLocation;
+}
+
+/**
+ * One imperative tool registration call site: `document.modelContext.registerTool(...)`,
+ * `navigator.modelContext.registerTool(...)`, or a React-style hook whose name
+ * suggests WebMCP (`useWebMCP`, `useMcpTool`, …).
+ *
+ * Extraction is syntactic and per-file (no cross-module resolution), so any
+ * field can come back `null`/`unknown` when the call doesn't fit the common
+ * "inline object literal, inline handler function" shape — rules that need a
+ * field just skip a call site where it's unavailable rather than guessing.
+ */
+export interface JsToolCallSite {
+  api: "registerTool" | "hook" | "unknown";
+  /**
+   * False when the first argument wasn't an inline object literal (or a
+   * same-file `const x = {...}` we could resolve it to) — e.g. built by a
+   * helper function, or imported. Rules that need to see the tool's shape
+   * to flag an *absence* (schema-required) must check this first: an
+   * unresolved call is "we don't know", not "it's missing".
+   */
+  argResolved: boolean;
+  /** The literal `name` property value, when statically resolvable. */
+  name: string | null;
+  description: string | null;
+  hasInputSchema: boolean;
+  /** Properties of the schema's top-level `properties` object, if it's an object literal. */
+  schemaProperties: JsSchemaProperty[] | null;
+  annotations: {
+    readOnlyHint: boolean | null;
+    destructiveHint: boolean | null;
+  };
+  /** Source text of the `execute`/`handler` function, when inline or resolvable in-file. */
+  handlerText: string | null;
+  handlerLoc: SourceLocation | null;
+  loc: SourceLocation;
+}
+
+/** A direct reference to `navigator.modelContext` or `document.modelContext`. */
+export interface JsModelContextRef {
+  surface: "navigator" | "document";
+  loc: SourceLocation;
+}
+
+/** Result of parsing one JS/TS file for the imperative WebMCP API. */
+export interface JsFileParse {
+  file: string;
+  source: string;
+  toolCalls: JsToolCallSite[];
+  modelContextRefs: JsModelContextRef[];
+}
+
 export interface RawFinding {
   ruleId: string;
   message: string;
@@ -96,4 +153,18 @@ export interface HtmlRule {
   /** Short human summary, surfaced in docs and `--help`. */
   description: string;
   check(parses: HtmlFileParse[], ctx: RuleContext): RawFinding[];
+}
+
+export interface JsRuleContext extends RuleContext {
+  /** `tool-count` threshold (default 15, see `WebmcpLintConfig.toolCountMax`). */
+  toolCountMax: number;
+}
+
+export interface JsRule {
+  id: string;
+  docs: string;
+  defaultSeverity: Severity;
+  fixable: boolean;
+  description: string;
+  check(parses: JsFileParse[], ctx: JsRuleContext): RawFinding[];
 }

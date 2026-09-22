@@ -40,9 +40,11 @@ export default {
 };
 \`\`\`
 
-- **html** rules run in \`webmcp-lint static\` (parse5, no browser).
+- **html** rules check the declarative API (\`toolname\`-annotated forms) via parse5.
+- **js** rules check the imperative API (\`registerTool\`/hook calls) via ts-morph.
+- Both **html** and **js** rules run in \`webmcp-lint static\` (no browser).
 - **runtime** rules run in \`webmcp-lint runtime\` (Playwright + the WebMCP polyfill).
-- \`webmcp-lint ci\` runs both.
+- \`webmcp-lint ci\` runs static + runtime together.
 `;
 
 writeFileSync(new URL("../docs/rules/README.md", import.meta.url), body);

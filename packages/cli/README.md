@@ -19,7 +19,7 @@ npx playwright install chromium
 ## Use
 
 ```bash
-webmcp-lint static "**/*.html"          # declarative-HTML static analysis
+webmcp-lint static                      # declarative HTML + imperative JS/TS, default globs
 webmcp-lint runtime http://localhost:3000   # load with the real polyfill, inspect tools
 webmcp-lint ci --sarif-output results.sarif # both passes, CI exit codes + SARIF
 webmcp-lint rules                        # list built-in rule IDs
