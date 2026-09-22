@@ -3,6 +3,17 @@ import type { RuntimeRule } from "../types.js";
 
 const DUPLICATE_RE = /already registered|already exists|duplicate/i;
 
+/**
+ * Loosely match a console.error that looks like it's actually about WebMCP
+ * tool/modelContext registration, as opposed to unrelated library noise that
+ * merely contains the substring "regist-" (accelerator/codec/service
+ * registries are a common source: "RegisterAccelerator", "npu_registry.cc",
+ * "webnn_registry.cc", …, all logged via console.error by native/wasm
+ * libraries regardless of actual severity).
+ */
+const TOOL_REGISTRATION_RE =
+  /webmcp|model[\s-]?context|\btool\b[\s\S]{0,60}(regist|schema)|(regist|schema)[\s\S]{0,60}\btool\b/i;
+
 export const registersCleanly: RuntimeRule = {
   id: "registers-cleanly",
   docs: "https://github.com/pravoobi/webmcp-lint/blob/main/docs/rules/registers-cleanly.md",
@@ -77,12 +88,17 @@ export const registersCleanly: RuntimeRule = {
         });
       }
       for (const err of obs.consoleErrors) {
-        if (!/tool|modelcontext|register|schema/i.test(err)) continue;
+        if (!TOOL_REGISTRATION_RE.test(err)) continue;
         out.push({
           ruleId: "registers-cleanly",
           file: obs.url,
           loc: at(1),
           confidence: "low",
+          // A substring match on free-text console output is a guess, not a
+          // structural signal like the registration-attempt checks above —
+          // never let it alone fail CI. The user can still raise this back
+          // to "error" via config if they want.
+          severity: "warn",
           message: `Console error during page load: ${err}`,
         });
       }

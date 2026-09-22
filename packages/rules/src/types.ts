@@ -67,6 +67,13 @@ export interface RawFinding {
   /** A suggested edit, shown to the user but never auto-applied by default. */
   suggestion?: string;
   confidence?: Confidence;
+  /**
+   * Override the rule's `defaultSeverity` for this specific finding — e.g. a
+   * low-confidence heuristic branch that shouldn't be able to fail CI on its
+   * own. Ignored when the user has explicitly configured this rule's level
+   * in `WebmcpLintConfig.rules`; that always wins.
+   */
+  severity?: Severity;
 }
 
 export interface Finding extends RawFinding {

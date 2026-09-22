@@ -24,10 +24,17 @@ export function runRuntimeRules(
 
   const findings: Finding[] = [];
   for (const rule of active) {
-    const level = resolved.rules[rule.id] ?? rule.defaultSeverity;
-    if (level === "off") continue;
+    const configured = resolved.rules[rule.id];
+    if (configured === "off") continue;
     for (const raw of rule.check(observations, {})) {
-      findings.push({ ...raw, severity: level, fixable: rule.fixable, docs: rule.docs });
+      findings.push({
+        ...raw,
+        // An explicit user override always wins; otherwise let the rule
+        // downgrade an individual low-confidence finding, else its default.
+        severity: configured ?? raw.severity ?? rule.defaultSeverity,
+        fixable: rule.fixable,
+        docs: rule.docs,
+      });
     }
   }
   return findings.sort(compareFindings);
