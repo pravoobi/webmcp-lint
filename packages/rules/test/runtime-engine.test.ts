@@ -80,6 +80,13 @@ describe("registers-cleanly severity wiring", () => {
     );
     const dup = findings.find((f) => f.message.includes("registered 2 times"));
     expect(dup?.severity).toBe("error");
+    // False positive from dogfooding a non-React demo (vanilla JS + a
+    // hand-rolled polyfill) that still hit this path: the message used to
+    // flatly assert "this is usually React StrictMode" regardless of
+    // framework. It can still name StrictMode as the common case, but must
+    // not claim it's the cause outright.
+    expect(dup?.message).not.toMatch(/usually React StrictMode/);
+    expect(dup?.message).toMatch(/duplicate init path|any .* can do it/i);
   });
 
   it("an explicit config override still wins over the finding's own severity", () => {

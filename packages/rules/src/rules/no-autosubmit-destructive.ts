@@ -1,5 +1,5 @@
 import type { HtmlRule, RawFinding } from "../types.js";
-import { isMutatingMethod, toolLabel } from "./util.js";
+import { isMutatingMethod, looksReadOnly, toolLabel } from "./util.js";
 
 export const noAutosubmitDestructive: HtmlRule = {
   id: "no-autosubmit-destructive",
@@ -18,7 +18,10 @@ export const noAutosubmitDestructive: HtmlRule = {
         const haystack = [tool.action, tool.name ?? "", tool.formName ?? ""]
           .join(" ")
           .toLowerCase();
-        const destructiveName = ctx.destructiveRegex.test(haystack);
+        // A destructive-looking noun (e.g. "order") paired with a read verb
+        // (e.g. "get_order_status") is a lookup, not a mutation — only trust
+        // the name heuristic when nothing marks it as a read.
+        const destructiveName = ctx.destructiveRegex.test(haystack) && !looksReadOnly(haystack);
 
         if (!mutating && !destructiveName) continue;
 
@@ -30,7 +33,11 @@ export const noAutosubmitDestructive: HtmlRule = {
           ruleId: "no-autosubmit-destructive",
           file: parse.file,
           loc: tool.loc,
-          confidence: destructiveName ? "high" : "medium",
+          // The HTTP method is a hard fact; a name/action substring match is
+          // a guess, so it's lower confidence and — unless the method also
+          // mutates — capped at `warn` rather than the rule's default `error`.
+          confidence: mutating ? "high" : "medium",
+          ...(mutating ? {} : { severity: "warn" }),
           message:
             `Tool ${toolLabel(tool)} sets \`toolautosubmit\` on ${why}. ` +
             "Chrome's guidance is to auto-submit only read-only operations; a " +

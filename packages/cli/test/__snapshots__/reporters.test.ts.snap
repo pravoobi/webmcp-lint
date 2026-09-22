@@ -106,7 +106,7 @@ exports[`renderSarif > matches the snapshot 1`] = `
               "id": "unique-toolnames",
               "name": "UniqueToolnames",
               "shortDescription": {
-                "text": "Require tool names to be unique across all scanned pages."
+                "text": "Require tool names to be unique within a page, and flag reuse across pages."
               },
               "helpUri": "https://github.com/pravoobi/webmcp-lint/blob/main/docs/rules/unique-toolnames.md",
               "defaultConfiguration": {

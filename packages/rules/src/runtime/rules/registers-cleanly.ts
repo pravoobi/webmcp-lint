@@ -52,8 +52,11 @@ export const registersCleanly: RuntimeRule = {
             confidence: "high",
             message:
               `Tool "${name}" was registered ${count} times on one page load. ` +
-              "This is usually React StrictMode / double-mounting; register once and " +
-              "tie the registration lifetime to an AbortSignal.",
+              "This usually means the setup code that calls registerTool ran twice — " +
+              "React's StrictMode double-invoking effects in development is the most " +
+              "common cause, but any duplicate init path (a second script, a re-run " +
+              "framework lifecycle hook) can do it. Register once and tie the " +
+              "registration lifetime to an AbortSignal, so a second run is a safe no-op.",
           });
         }
       }

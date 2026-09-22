@@ -30,6 +30,38 @@ describe("no-autosubmit-destructive", () => {
       ),
     ).not.toContain("no-autosubmit-destructive");
   });
+
+  it("does not flag a GET lookup whose name contains a destructive noun (get_order_status)", () => {
+    // Real false positive from dogfooding googlechromelabs/webmcp-tools:
+    // "order" is a destructive pattern, but this is plainly a read.
+    expect(
+      ruleIds(
+        `<form toolname="get_order_status" tooldescription="Search orders and return shipping status" method="get" action="history.html" toolautosubmit><input name="timeframe"></form>`,
+      ),
+    ).not.toContain("no-autosubmit-destructive");
+  });
+
+  it("mutating-method matches stay at the rule default (error); name-only matches are capped at warn", () => {
+    const { findings: mutating } = analyzeHtmlSources([
+      {
+        file: "t.html",
+        source: `<form toolname="save" tooldescription="Save the profile changes" method="post" action="/profile" toolautosubmit><input name="bio"></form>`,
+      },
+    ]);
+    expect(mutating.find((f) => f.ruleId === "no-autosubmit-destructive")?.severity).toBe(
+      "error",
+    );
+
+    const { findings: nameOnly } = analyzeHtmlSources([
+      {
+        file: "t.html",
+        source: `<form toolname="rm" tooldescription="Delete the current account" action="/account/delete" toolautosubmit><input name="id"></form>`,
+      },
+    ]);
+    expect(nameOnly.find((f) => f.ruleId === "no-autosubmit-destructive")?.severity).toBe(
+      "warn",
+    );
+  });
 });
 
 describe("no-sensitive-inputs-exposed", () => {
@@ -99,7 +131,7 @@ describe("named-inputs", () => {
 });
 
 describe("unique-toolnames", () => {
-  it("flags a name used on two pages", () => {
+  it("flags a name used on two pages, but only as a warn (ambiguous — WebMCP scopes tools per page)", () => {
     const { findings } = analyzeHtmlSources([
       {
         file: "a.html",
@@ -112,6 +144,21 @@ describe("unique-toolnames", () => {
     ]);
     const dupes = findings.filter((f) => f.ruleId === "unique-toolnames");
     expect(dupes).toHaveLength(2);
+    expect(dupes.every((f) => f.severity === "warn")).toBe(true);
+  });
+
+  it("flags a name used twice in the same page as a certain error", () => {
+    const { findings } = analyzeHtmlSources([
+      {
+        file: "a.html",
+        source:
+          `<form toolname="dup" tooldescription="Do the first thing an agent wants"><input name="a"></form>` +
+          `<form toolname="dup" tooldescription="Do a second, different thing"><input name="b"></form>`,
+      },
+    ]);
+    const dupes = findings.filter((f) => f.ruleId === "unique-toolnames");
+    expect(dupes).toHaveLength(2);
+    expect(dupes.every((f) => f.severity === "error")).toBe(true);
   });
 });
 

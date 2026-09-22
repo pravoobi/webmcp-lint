@@ -18,3 +18,15 @@ export function isMutatingMethod(tool: HtmlTool): boolean {
 export function normalizeDescription(desc: string | null): string {
   return (desc ?? "").replace(/\s+/g, " ").trim();
 }
+
+/**
+ * Read/query verbs that make an otherwise destructive-looking name a lookup,
+ * not a mutation — e.g. `get_order_status` matches the destructive noun
+ * "order" but is plainly a read. Used to soften name-only heuristics; a real
+ * mutating HTTP method is unaffected by this and still always flags.
+ */
+const READ_VERB_RE = /\b(get|view|list|search|check|lookup|fetch|query|find|show|track|status|history)\b/i;
+
+export function looksReadOnly(haystack: string): boolean {
+  return READ_VERB_RE.test(haystack);
+}
