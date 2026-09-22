@@ -1,5 +1,5 @@
 import { appendFileSync } from "node:fs";
-import type { Finding } from "@webmcp-lint/rules";
+import type { Finding } from "@pravoobi/webmcp-lint-rules";
 import { displayPath, ghCommand, type ReportInput } from "../report.js";
 
 function escData(s: string): string {

@@ -16,7 +16,7 @@ function find(
 
 export const schemaValidates: RuntimeRule = {
   id: "schema-validates",
-  docs: "https://github.com/webmcp-lint/webmcp-lint/blob/main/docs/rules/schema-validates.md",
+  docs: "https://github.com/pravoobi/webmcp-lint/blob/main/docs/rules/schema-validates.md",
   defaultSeverity: "warn",
   fixable: false,
   description:

@@ -21,7 +21,7 @@ jobs:
       - run: pnpm -r build
       - run: pnpm -r typecheck
       - name: Install Chromium for the runtime suite
-        run: pnpm --filter @webmcp-lint/runtime exec playwright install --with-deps chromium
+        run: pnpm --filter @pravoobi/webmcp-lint-runtime exec playwright install --with-deps chromium
       - run: pnpm test
 
   dogfood:

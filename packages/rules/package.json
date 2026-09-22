@@ -1,5 +1,5 @@
 {
-  "name": "@webmcp-lint/rules",
+  "name": "@pravoobi/webmcp-lint-rules",
   "version": "0.1.0",
   "description": "WebMCP lint rule engine and built-in rules (pure, no I/O)",
   "type": "module",

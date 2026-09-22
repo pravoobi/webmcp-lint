@@ -5,7 +5,7 @@ const NON_DATA_TYPES = new Set(["submit", "button", "reset", "image"]);
 
 export const namedInputs: HtmlRule = {
   id: "named-inputs",
-  docs: "https://github.com/webmcp-lint/webmcp-lint/blob/main/docs/rules/named-inputs.md",
+  docs: "https://github.com/pravoobi/webmcp-lint/blob/main/docs/rules/named-inputs.md",
   defaultSeverity: "warn",
   fixable: true,
   description:

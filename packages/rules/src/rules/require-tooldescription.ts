@@ -19,7 +19,7 @@ const MIN_LENGTH = 12;
 
 export const requireTooldescription: HtmlRule = {
   id: "require-tooldescription",
-  docs: "https://github.com/webmcp-lint/webmcp-lint/blob/main/docs/rules/require-tooldescription.md",
+  docs: "https://github.com/pravoobi/webmcp-lint/blob/main/docs/rules/require-tooldescription.md",
   defaultSeverity: "error",
   fixable: false,
   description: "Require every declarative tool to carry a `tooldescription`.",
@@ -47,7 +47,7 @@ export const requireTooldescription: HtmlRule = {
 
 export const descriptionQuality: HtmlRule = {
   id: "description-quality",
-  docs: "https://github.com/webmcp-lint/webmcp-lint/blob/main/docs/rules/description-quality.md",
+  docs: "https://github.com/pravoobi/webmcp-lint/blob/main/docs/rules/description-quality.md",
   defaultSeverity: "warn",
   fixable: false,
   description:

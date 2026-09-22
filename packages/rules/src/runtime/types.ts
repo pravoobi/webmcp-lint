@@ -1,5 +1,5 @@
 /**
- * Shapes produced by the Playwright harness (`@webmcp-lint/runtime`) and consumed
+ * Shapes produced by the Playwright harness (`@pravoobi/webmcp-lint-runtime`) and consumed
  * by the pure runtime rules below. The harness does all the impure work — launching
  * a browser, injecting the polyfill, invoking tools — and hands the rules a plain
  * data record so they stay unit-testable.

@@ -3,7 +3,7 @@ import { isMutatingMethod, toolLabel } from "./util.js";
 
 export const noAutosubmitDestructive: HtmlRule = {
   id: "no-autosubmit-destructive",
-  docs: "https://github.com/webmcp-lint/webmcp-lint/blob/main/docs/rules/no-autosubmit-destructive.md",
+  docs: "https://github.com/pravoobi/webmcp-lint/blob/main/docs/rules/no-autosubmit-destructive.md",
   defaultSeverity: "error",
   fixable: false,
   description:

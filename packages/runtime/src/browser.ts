@@ -5,7 +5,7 @@ import type {
   RuntimeObservation,
   RuntimeToolInfo,
   ToolInvocation,
-} from "@webmcp-lint/rules";
+} from "@pravoobi/webmcp-lint-rules";
 import { polyfillInitScript } from "./polyfill.js";
 import { INSTRUMENT_SCRIPT } from "./instrument.js";
 import { invalidSample, validSample } from "./sample.js";

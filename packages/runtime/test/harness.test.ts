@@ -6,7 +6,7 @@ import {
   runRuntimeRules,
   type Finding,
   type RuntimeObservation,
-} from "@webmcp-lint/rules";
+} from "@pravoobi/webmcp-lint-rules";
 import { observeUrls } from "../src/browser.js";
 import { serveDir } from "../src/server.js";
 import { invalidSample, validSample } from "../src/sample.js";

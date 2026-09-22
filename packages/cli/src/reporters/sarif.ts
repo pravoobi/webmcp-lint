@@ -1,10 +1,10 @@
 import { createHash } from "node:crypto";
-import { ruleCatalog } from "@webmcp-lint/rules";
+import { ruleCatalog } from "@pravoobi/webmcp-lint-rules";
 import { displayPath, sarifLevel, type ReportInput } from "../report.js";
 
 const SCHEMA =
   "https://raw.githubusercontent.com/oasis-tcs/sarif-spec/master/Schemata/sarif-schema-2.1.0.json";
-const INFO_URI = "https://github.com/webmcp-lint/webmcp-lint";
+const INFO_URI = "https://github.com/pravoobi/webmcp-lint";
 
 function fingerprint(ruleId: string, uri: string, line: number, message: string): string {
   return createHash("sha256")

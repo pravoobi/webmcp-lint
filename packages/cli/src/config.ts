@@ -1,7 +1,7 @@
 import { pathToFileURL } from "node:url";
 import { readFile, stat } from "node:fs/promises";
 import { resolve } from "node:path";
-import type { WebmcpLintConfig } from "@webmcp-lint/rules";
+import type { WebmcpLintConfig } from "@pravoobi/webmcp-lint-rules";
 
 const CANDIDATES = [
   "webmcp-lint.config.ts",

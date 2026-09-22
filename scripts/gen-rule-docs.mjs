@@ -5,7 +5,7 @@ import { fileURLToPath } from "node:url";
 
 const catalogUrl = new URL("../packages/rules/dist/catalog.js", import.meta.url);
 if (!existsSync(fileURLToPath(catalogUrl))) {
-  console.error("build @webmcp-lint/rules first: pnpm --filter @webmcp-lint/rules build");
+  console.error("build @pravoobi/webmcp-lint-rules first: pnpm --filter @pravoobi/webmcp-lint-rules build");
   process.exit(1);
 }
 const { ruleCatalog } = await import(catalogUrl.href);

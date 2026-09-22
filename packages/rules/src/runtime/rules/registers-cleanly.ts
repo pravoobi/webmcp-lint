@@ -5,7 +5,7 @@ const DUPLICATE_RE = /already registered|already exists|duplicate/i;
 
 export const registersCleanly: RuntimeRule = {
   id: "registers-cleanly",
-  docs: "https://github.com/webmcp-lint/webmcp-lint/blob/main/docs/rules/registers-cleanly.md",
+  docs: "https://github.com/pravoobi/webmcp-lint/blob/main/docs/rules/registers-cleanly.md",
   defaultSeverity: "error",
   fixable: false,
   description:

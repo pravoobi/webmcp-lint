@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import type { Finding } from "@webmcp-lint/rules";
+import type { Finding } from "@pravoobi/webmcp-lint-rules";
 import type { ReportInput } from "../src/report.js";
 import { renderSarif } from "../src/reporters/sarif.js";
 import { renderJson } from "../src/reporters/json.js";

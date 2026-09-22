@@ -31,7 +31,7 @@ to files.
 ## GitHub Action
 
 ```yaml
-- uses: pravoobi/webmcp-lint@v1
+- uses: pravoobi/webmcp-lint/action@v1
   with:
     static-globs: "dist/**/*.html"
     build-command: npm run build

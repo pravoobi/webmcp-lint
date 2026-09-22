@@ -1,5 +1,5 @@
 {
-  "name": "@webmcp-lint/static",
+  "name": "@pravoobi/webmcp-lint-static",
   "version": "0.1.0",
   "description": "Static analyzers for WebMCP: declarative HTML (and later JS/TS)",
   "type": "module",
@@ -32,7 +32,7 @@
     "typecheck": "tsc -p tsconfig.json --noEmit"
   },
   "dependencies": {
-    "@webmcp-lint/rules": "workspace:*",
+    "@pravoobi/webmcp-lint-rules": "workspace:*",
     "parse5": "^7.2.1"
   }
 }

@@ -4,7 +4,7 @@ import type {
   HtmlTool,
   HtmlToolInput,
   SourceLocation,
-} from "@webmcp-lint/rules";
+} from "@pravoobi/webmcp-lint-rules";
 
 /**
  * Attribute names for the declarative WebMCP API.

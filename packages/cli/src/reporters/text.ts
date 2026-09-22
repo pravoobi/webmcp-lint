@@ -1,4 +1,4 @@
-import type { Finding } from "@webmcp-lint/rules";
+import type { Finding } from "@pravoobi/webmcp-lint-rules";
 import { displayPath, type ReportInput } from "../report.js";
 
 const COLOR = process.stdout.isTTY && !process.env["NO_COLOR"];

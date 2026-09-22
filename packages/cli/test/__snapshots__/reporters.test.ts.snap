@@ -9,7 +9,7 @@ exports[`renderSarif > matches the snapshot 1`] = `
       "tool": {
         "driver": {
           "name": "webmcp-lint",
-          "informationUri": "https://github.com/webmcp-lint/webmcp-lint",
+          "informationUri": "https://github.com/pravoobi/webmcp-lint",
           "version": "0.0.0-test",
           "rules": [
             {
@@ -18,7 +18,7 @@ exports[`renderSarif > matches the snapshot 1`] = `
               "shortDescription": {
                 "text": "Disallow \`toolautosubmit\` on forms that mutate state or look destructive."
               },
-              "helpUri": "https://github.com/webmcp-lint/webmcp-lint/blob/main/docs/rules/no-autosubmit-destructive.md",
+              "helpUri": "https://github.com/pravoobi/webmcp-lint/blob/main/docs/rules/no-autosubmit-destructive.md",
               "defaultConfiguration": {
                 "level": "error"
               },
@@ -36,7 +36,7 @@ exports[`renderSarif > matches the snapshot 1`] = `
               "shortDescription": {
                 "text": "Disallow password/file/hidden inputs from appearing in a tool's input schema."
               },
-              "helpUri": "https://github.com/webmcp-lint/webmcp-lint/blob/main/docs/rules/no-sensitive-inputs-exposed.md",
+              "helpUri": "https://github.com/pravoobi/webmcp-lint/blob/main/docs/rules/no-sensitive-inputs-exposed.md",
               "defaultConfiguration": {
                 "level": "error"
               },
@@ -54,7 +54,7 @@ exports[`renderSarif > matches the snapshot 1`] = `
               "shortDescription": {
                 "text": "Require every declarative tool to carry a \`tooldescription\`."
               },
-              "helpUri": "https://github.com/webmcp-lint/webmcp-lint/blob/main/docs/rules/require-tooldescription.md",
+              "helpUri": "https://github.com/pravoobi/webmcp-lint/blob/main/docs/rules/require-tooldescription.md",
               "defaultConfiguration": {
                 "level": "error"
               },
@@ -72,7 +72,7 @@ exports[`renderSarif > matches the snapshot 1`] = `
               "shortDescription": {
                 "text": "Flag placeholder or too-short \`tooldescription\` values."
               },
-              "helpUri": "https://github.com/webmcp-lint/webmcp-lint/blob/main/docs/rules/description-quality.md",
+              "helpUri": "https://github.com/pravoobi/webmcp-lint/blob/main/docs/rules/description-quality.md",
               "defaultConfiguration": {
                 "level": "warning"
               },
@@ -90,7 +90,7 @@ exports[`renderSarif > matches the snapshot 1`] = `
               "shortDescription": {
                 "text": "Flag tool form controls without a \`name\` (silently dropped from the schema)."
               },
-              "helpUri": "https://github.com/webmcp-lint/webmcp-lint/blob/main/docs/rules/named-inputs.md",
+              "helpUri": "https://github.com/pravoobi/webmcp-lint/blob/main/docs/rules/named-inputs.md",
               "defaultConfiguration": {
                 "level": "warning"
               },
@@ -108,7 +108,7 @@ exports[`renderSarif > matches the snapshot 1`] = `
               "shortDescription": {
                 "text": "Require tool names to be unique across all scanned pages."
               },
-              "helpUri": "https://github.com/webmcp-lint/webmcp-lint/blob/main/docs/rules/unique-toolnames.md",
+              "helpUri": "https://github.com/pravoobi/webmcp-lint/blob/main/docs/rules/unique-toolnames.md",
               "defaultConfiguration": {
                 "level": "error"
               },
@@ -126,7 +126,7 @@ exports[`renderSarif > matches the snapshot 1`] = `
               "shortDescription": {
                 "text": "Page load should register tools once, with no duplicate registrations or errors."
               },
-              "helpUri": "https://github.com/webmcp-lint/webmcp-lint/blob/main/docs/rules/registers-cleanly.md",
+              "helpUri": "https://github.com/pravoobi/webmcp-lint/blob/main/docs/rules/registers-cleanly.md",
               "defaultConfiguration": {
                 "level": "error"
               },
@@ -144,7 +144,7 @@ exports[`renderSarif > matches the snapshot 1`] = `
               "shortDescription": {
                 "text": "Each tool should run cleanly on a schema-valid input and never hang."
               },
-              "helpUri": "https://github.com/webmcp-lint/webmcp-lint/blob/main/docs/rules/schema-validates.md",
+              "helpUri": "https://github.com/pravoobi/webmcp-lint/blob/main/docs/rules/schema-validates.md",
               "defaultConfiguration": {
                 "level": "warning"
               },
@@ -162,7 +162,7 @@ exports[`renderSarif > matches the snapshot 1`] = `
               "shortDescription": {
                 "text": "Invoking a read-only tool must not fire non-GET network requests."
               },
-              "helpUri": "https://github.com/webmcp-lint/webmcp-lint/blob/main/docs/rules/no-side-effects-on-read.md",
+              "helpUri": "https://github.com/pravoobi/webmcp-lint/blob/main/docs/rules/no-side-effects-on-read.md",
               "defaultConfiguration": {
                 "level": "error"
               },

@@ -5,7 +5,7 @@ import {
   type Finding,
   type HtmlFileParse,
   type WebmcpLintConfig,
-} from "@webmcp-lint/rules";
+} from "@pravoobi/webmcp-lint-rules";
 import { parseHtml } from "./html/parse.js";
 
 export { parseHtml } from "./html/parse.js";

@@ -20,7 +20,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - uses: webmcp-lint/webmcp-lint/action@v1
+      - uses: pravoobi/webmcp-lint/action@v1
         with:
           static-globs: "public/**/*.html"
           no-runtime: "true"
@@ -37,7 +37,7 @@ jobs:
       - uses: actions/setup-node@v4
         with: { node-version: 20 }
       - run: npm ci
-      - uses: webmcp-lint/webmcp-lint/action@v1
+      - uses: pravoobi/webmcp-lint/action@v1
         with:
           config: webmcp-lint.config.ts
           build-command: npm run build
@@ -51,7 +51,7 @@ jobs:
 Or point it at a directory of static HTML and let the action serve it:
 
 ```yaml
-      - uses: webmcp-lint/webmcp-lint/action@v1
+      - uses: pravoobi/webmcp-lint/action@v1
         with:
           dir: dist
           routes: routes.json

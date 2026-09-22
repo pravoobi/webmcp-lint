@@ -26,12 +26,12 @@
     "typecheck": "tsc -p tsconfig.json --noEmit"
   },
   "dependencies": {
-    "@webmcp-lint/rules": "workspace:*",
-    "@webmcp-lint/static": "workspace:*",
+    "@pravoobi/webmcp-lint-rules": "workspace:*",
+    "@pravoobi/webmcp-lint-static": "workspace:*",
     "tinyglobby": "^0.2.10"
   },
   "optionalDependencies": {
-    "@webmcp-lint/runtime": "workspace:*"
+    "@pravoobi/webmcp-lint-runtime": "workspace:*"
   },
   "engines": {
     "node": ">=20"

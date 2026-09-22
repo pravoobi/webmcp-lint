@@ -1,5 +1,5 @@
 {
-  "name": "@webmcp-lint/runtime",
+  "name": "@pravoobi/webmcp-lint-runtime",
   "version": "0.1.0",
   "description": "Playwright runtime harness: loads pages with the WebMCP polyfill and inspects what registers",
   "type": "module",
@@ -32,7 +32,7 @@
     "typecheck": "tsc -p tsconfig.json --noEmit"
   },
   "dependencies": {
-    "@webmcp-lint/rules": "workspace:*",
+    "@pravoobi/webmcp-lint-rules": "workspace:*",
     "@mcp-b/webmcp-polyfill": "^5.1.0",
     "playwright": "^1.48.0"
   },

@@ -30,7 +30,7 @@ pnpm build
 node packages/cli/dist/index.js static "**/*.html"
 
 # runtime needs a browser once:
-pnpm --filter @webmcp-lint/runtime exec playwright install chromium
+pnpm --filter @pravoobi/webmcp-lint-runtime exec playwright install chromium
 node packages/cli/dist/index.js runtime --dir ./dist --routes routes.json
 ```
 
@@ -62,7 +62,7 @@ runtime / ci:
 scanning, and posts a PR summary comment. See [`action/README.md`](./action/README.md).
 
 ```yaml
-- uses: webmcp-lint/webmcp-lint/action@v1
+- uses: pravoobi/webmcp-lint/action@v1
   with:
     build-command: npm run build
     serve-command: npx serve -l 3000 dist

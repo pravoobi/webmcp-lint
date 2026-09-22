@@ -9,8 +9,8 @@ export default defineConfig({
   },
   resolve: {
     alias: {
-      "@webmcp-lint/rules": r("./packages/rules/src/index.ts"),
-      "@webmcp-lint/static": r("./packages/static/src/index.ts"),
+      "@pravoobi/webmcp-lint-rules": r("./packages/rules/src/index.ts"),
+      "@pravoobi/webmcp-lint-static": r("./packages/static/src/index.ts"),
     },
   },
 });

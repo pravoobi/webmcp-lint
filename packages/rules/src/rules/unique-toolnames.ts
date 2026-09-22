@@ -2,7 +2,7 @@ import type { HtmlRule, RawFinding, SourceLocation } from "../types.js";
 
 export const uniqueToolnames: HtmlRule = {
   id: "unique-toolnames",
-  docs: "https://github.com/webmcp-lint/webmcp-lint/blob/main/docs/rules/unique-toolnames.md",
+  docs: "https://github.com/pravoobi/webmcp-lint/blob/main/docs/rules/unique-toolnames.md",
   defaultSeverity: "error",
   fixable: false,
   description: "Require tool names to be unique across all scanned pages.",

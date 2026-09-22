@@ -1,5 +1,5 @@
 import { isAbsolute, relative } from "node:path";
-import type { Finding, Severity } from "@webmcp-lint/rules";
+import type { Finding, Severity } from "@pravoobi/webmcp-lint-rules";
 
 export interface ReportInput {
   findings: Finding[];

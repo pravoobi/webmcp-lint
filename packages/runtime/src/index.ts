@@ -5,7 +5,7 @@ import {
   type Finding,
   type RuntimeObservation,
   type WebmcpLintConfig,
-} from "@webmcp-lint/rules";
+} from "@pravoobi/webmcp-lint-rules";
 import { observeUrls, type HarnessOptions } from "./browser.js";
 import { serveDir } from "./server.js";
 

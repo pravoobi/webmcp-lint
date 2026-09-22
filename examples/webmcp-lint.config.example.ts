@@ -1,4 +1,4 @@
-import type { WebmcpLintConfig } from "@webmcp-lint/rules";
+import type { WebmcpLintConfig } from "@pravoobi/webmcp-lint-rules";
 
 /**
  * Copy this to `webmcp-lint.config.ts` in your project root.

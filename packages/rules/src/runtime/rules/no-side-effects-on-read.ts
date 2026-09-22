@@ -15,7 +15,7 @@ function isReadOnly(tool: RuntimeToolInfo): boolean {
 
 export const noSideEffectsOnRead: RuntimeRule = {
   id: "no-side-effects-on-read",
-  docs: "https://github.com/webmcp-lint/webmcp-lint/blob/main/docs/rules/no-side-effects-on-read.md",
+  docs: "https://github.com/pravoobi/webmcp-lint/blob/main/docs/rules/no-side-effects-on-read.md",
   defaultSeverity: "error",
   fixable: false,
   description:

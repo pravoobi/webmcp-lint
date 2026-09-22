@@ -19,7 +19,7 @@
     "typecheck": "pnpm -r typecheck",
     "test": "vitest run",
     "test:watch": "vitest",
-    "docs": "pnpm --filter @webmcp-lint/rules build && node scripts/gen-rule-docs.mjs",
+    "docs": "pnpm --filter @pravoobi/webmcp-lint-rules build && node scripts/gen-rule-docs.mjs",
     "lint": "tsc -b --noEmit || true"
   },
   "devDependencies": {

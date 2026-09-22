@@ -20,17 +20,17 @@ importers:
 
   packages/cli:
     dependencies:
-      '@webmcp-lint/rules':
+      '@pravoobi/webmcp-lint-rules':
         specifier: workspace:*
         version: link:../rules
-      '@webmcp-lint/static':
+      '@pravoobi/webmcp-lint-static':
         specifier: workspace:*
         version: link:../static
       tinyglobby:
         specifier: ^0.2.10
         version: 0.2.17
     optionalDependencies:
-      '@webmcp-lint/runtime':
+      '@pravoobi/webmcp-lint-runtime':
         specifier: workspace:*
         version: link:../runtime
 
@@ -41,7 +41,7 @@ importers:
       '@mcp-b/webmcp-polyfill':
         specifier: ^5.1.0
         version: 5.1.0
-      '@webmcp-lint/rules':
+      '@pravoobi/webmcp-lint-rules':
         specifier: workspace:*
         version: link:../rules
       playwright:
@@ -50,7 +50,7 @@ importers:
 
   packages/static:
     dependencies:
-      '@webmcp-lint/rules':
+      '@pravoobi/webmcp-lint-rules':
         specifier: workspace:*
         version: link:../rules
       parse5:

@@ -3,7 +3,7 @@ import { toolLabel } from "./util.js";
 
 export const noSensitiveInputsExposed: HtmlRule = {
   id: "no-sensitive-inputs-exposed",
-  docs: "https://github.com/webmcp-lint/webmcp-lint/blob/main/docs/rules/no-sensitive-inputs-exposed.md",
+  docs: "https://github.com/pravoobi/webmcp-lint/blob/main/docs/rules/no-sensitive-inputs-exposed.md",
   defaultSeverity: "error",
   fixable: false,
   description:

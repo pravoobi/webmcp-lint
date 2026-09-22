@@ -5,8 +5,8 @@ import { readFile, writeFile, mkdir } from "node:fs/promises";
 import { dirname, resolve } from "node:path";
 import process from "node:process";
 import { glob } from "tinyglobby";
-import { analyzeHtmlFiles, type StaticResult } from "@webmcp-lint/static";
-import { ruleCatalog, type Finding } from "@webmcp-lint/rules";
+import { analyzeHtmlFiles, type StaticResult } from "@pravoobi/webmcp-lint-static";
+import { ruleCatalog, type Finding } from "@pravoobi/webmcp-lint-rules";
 import { loadConfig } from "./config.js";
 import { REPORT_FORMATS, type ReportFormat, type ReportInput } from "./report.js";
 import { render } from "./reporters/index.js";
@@ -207,11 +207,11 @@ async function loadRoutes(cwd: string, file: string): Promise<string[]> {
   return JSON.parse(await readFile(resolve(cwd, file), "utf8")) as string[];
 }
 
-type RuntimeMod = typeof import("@webmcp-lint/runtime");
+type RuntimeMod = typeof import("@pravoobi/webmcp-lint-runtime");
 
 async function importRuntime(): Promise<RuntimeMod | null> {
   try {
-    return await import("@webmcp-lint/runtime");
+    return await import("@pravoobi/webmcp-lint-runtime");
   } catch {
     return null;
   }
@@ -254,8 +254,8 @@ async function runRuntimeCmd(
   const mod = await importRuntime();
   if (!mod) {
     process.stderr.write(
-      "runtime: @webmcp-lint/runtime is not installed.\n" +
-        "  npm i -D @webmcp-lint/runtime && npx playwright install chromium\n",
+      "runtime: @pravoobi/webmcp-lint-runtime is not installed.\n" +
+        "  npm i -D @pravoobi/webmcp-lint-runtime && npx playwright install chromium\n",
     );
     return 2;
   }
@@ -323,7 +323,7 @@ async function runCi(
     }
     const mod = await importRuntime();
     if (!mod) {
-      process.stderr.write("ci: @webmcp-lint/runtime not installed; run with --no-runtime or install it.\n");
+      process.stderr.write("ci: @pravoobi/webmcp-lint-runtime not installed; run with --no-runtime or install it.\n");
       return 2;
     }
     try {
