@@ -1,6 +1,6 @@
 {
   "name": "@pravoobi/webmcp-lint-rules",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "description": "WebMCP lint rule engine and built-in rules (pure, no I/O)",
   "type": "module",
   "license": "MIT",
