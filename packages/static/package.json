@@ -1,6 +1,6 @@
 {
   "name": "@pravoobi/webmcp-lint-static",
-  "version": "0.1.1",
+  "version": "0.2.0",
   "description": "Static analyzers for WebMCP: declarative HTML and imperative JS/TS",
   "type": "module",
   "license": "MIT",
