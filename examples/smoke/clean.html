@@ -1,0 +1,21 @@
+<!doctype html>
+<html lang="en">
+  <head><title>Smoke test fixture</title></head>
+  <body>
+    <!--
+      Deliberately clean: used by .github/workflows/action-smoke-test.yml to prove
+      the published `pravoobi/webmcp-lint/action@v1` installs and runs the real npm
+      package end-to-end. Should produce zero findings — if a rule change makes this
+      fail, fix the fixture (or the rule), don't silence the smoke test.
+    -->
+    <form
+      toolname="searchCatalog"
+      tooldescription="Search the product catalog by keyword and return matching items"
+      method="get"
+      action="/search"
+      toolautosubmit
+    >
+      <input name="q" type="text" />
+    </form>
+  </body>
+</html>

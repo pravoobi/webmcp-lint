@@ -1,0 +1,48 @@
+name: action smoke test
+
+# Verifies the *published* Action actually resolves and runs — installs
+# webmcp-lint@latest from npm via `pravoobi/webmcp-lint/action@v1` (not the
+# in-repo source) and lints a fixture known to be clean. This is separate
+# from ci.yml's `dogfood` job, which lints examples/ with the monorepo's own
+# build and expects findings.
+on:
+  push:
+    branches: [main]
+    paths:
+      - action/action.yml
+      - examples/smoke/**
+      - .github/workflows/action-smoke-test.yml
+  pull_request:
+    paths:
+      - action/action.yml
+      - examples/smoke/**
+      - .github/workflows/action-smoke-test.yml
+  workflow_dispatch:
+
+jobs:
+  smoke:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Run published Action against a clean fixture
+        id: lint
+        uses: pravoobi/webmcp-lint/action@v1
+        with:
+          static-globs: "examples/smoke/*.html"
+          no-runtime: "true"
+          upload-sarif: "false"
+          comment: "false"
+
+      - name: Assert the run resolved and found nothing
+        run: |
+          echo "sarif-file: ${{ steps.lint.outputs.sarif-file }}"
+          echo "errors: ${{ steps.lint.outputs.errors }}"
+          if [ ! -f "${{ steps.lint.outputs.sarif-file }}" ]; then
+            echo "::error::Action produced no SARIF file — install or run step failed silently."
+            exit 1
+          fi
+          if [ "${{ steps.lint.outputs.errors }}" != "0" ]; then
+            echo "::error::Expected 0 errors on the smoke fixture, got ${{ steps.lint.outputs.errors }}."
+            exit 1
+          fi
