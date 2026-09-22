@@ -1,6 +1,6 @@
 {
   "name": "webmcp-lint",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Lint a site's WebMCP tools against Chrome's guidance and agent-safety rules",
   "type": "module",
   "license": "MIT",
